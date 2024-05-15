@@ -34,7 +34,7 @@ const Message = () => {
     const handleSendMail = async () => {
         if (messagesChoosen.length === 0) return;
         else if (!text && text === "") {
-            toast.warning("Bạn phải nhập nội dung");
+            toast.warning("You must to enter content!");
             return;
         }
         const body = {
@@ -52,11 +52,11 @@ const Message = () => {
         <div className='container'>
             <div className='inbox'>
                 <aside>
-                    <div className="title">Tin nhắn</div>
+                    <div className="title">Messages</div>
                     <MessageList messages={messages} handleOpenMessage={handleOpenMessage} onGet={getMessages} />
                 </aside>
                 <main>
-                    <div className="title">{messagesChoosen.length > 0 && messagesChoosen[0]?.fullname || "Hãy mở một tin nhắn"}</div>
+                    <div className="title">{messagesChoosen.length > 0 && messagesChoosen[0]?.fullname || "Let open a message"}</div>
                     <div className="message-wrap">
                         <div className="senderSays">
                             {messagesChoosen.length > 0 && <Avatar {...stringAvatar(getFirstLetter(getFirstName(messagesChoosen[0]?.fullname)))} />}
@@ -83,7 +83,7 @@ const Message = () => {
                     </div>
                     <footer>
                         <form>
-                            <input placeholder='Nhập tin nhắn' type='text' value={text} onChange={(e) => setText(e.target.value)} />
+                            <input placeholder='Enter a message' type='text' value={text} onChange={(e) => setText(e.target.value)} />
                             <Button variant="contained" color="error" className="send" onClick={handleSendMail}>
                                 Send
                                 <SendOutlined />

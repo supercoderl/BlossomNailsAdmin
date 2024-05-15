@@ -10,53 +10,30 @@ import { toast } from "react-toastify";
 import ModalCustom from "components/Modal/Modal";
 import CustomerViewer from "./customer-forms/CustomerViewer";
 
-function createData(customerID, name, address, phone) {
-    return { customerID, name, address, phone };
-}
-
-const rows = [
-    createData(84564564, 'Nguyễn Văn Thanh', 'test', '0917282199'),
-    createData(98764560, 'Trần Đại Bảo', 'test', '0987687877'),
-    createData(84564569, 'Nguyễn Văn Thanh', 'test', '0917282199'),
-    createData(98764568, 'Trần Đại Bảo', 'test', '0987687877'),
-    createData(84564567, 'Nguyễn Văn Thanh', 'test', '0917282199'),
-    createData(98764574, 'Trần Đại Bảo', 'test', '0987687877'),
-    createData(84564504, 'Nguyễn Văn Thanh', 'test', '0917282199'),
-    createData(98764564, 'Trần Đại Bảo', 'test', '0987687877'),
-    createData(84564364, 'Nguyễn Văn Thanh', 'test', '0917282199'),
-    createData(98714564, 'Trần Đại Bảo', 'test', '0987687877'),
-];
-
 const headCells = [
     {
         id: 'customerID',
         align: 'center',
         disablePadding: false,
-        label: 'STT'
+        label: 'ID'
     },
     {
         id: 'name',
         align: 'left',
         disablePadding: true,
-        label: 'Tên khách hàng'
+        label: 'Customer name'
     },
     {
         id: 'phone',
         align: 'right',
         disablePadding: false,
-        label: 'Số điện thoại'
-    },
-    {
-        id: 'address',
-        align: 'left',
-        disablePadding: false,
-        label: 'Địa chỉ'
+        label: 'Phone number'
     },
     {
         id: 'actions',
         align: 'center',
         disablePadding: false,
-        label: 'Chức năng'
+        label: 'Actions'
     },
 ];
 
@@ -110,7 +87,7 @@ const Customer = () => {
 
     return (
         <>
-            <MainCard title="Danh sách khách hàng">
+            <MainCard title="Customer list">
                 <TableContainer
                     sx={{
                         width: '100%',
@@ -156,15 +133,14 @@ const Customer = () => {
                                             </TableCell>
                                             <TableCell align="left">{row.lastname + " " + row.firstname}</TableCell>
                                             <TableCell align="right">{"0" + row.phone}</TableCell>
-                                            <TableCell align="left">{row.userAddress?.address || ""}</TableCell>
                                             <TableCell align="center">
                                                 <Box>
-                                                    <Tooltip title="Cập nhật" placement="top">
+                                                    <Tooltip title="Update" placement="top">
                                                         <IconButton aria-label="edit" onClick={() => handleOpen(row, "update")}>
                                                             <EditOutlined />
                                                         </IconButton>
                                                     </Tooltip>
-                                                    <Tooltip title="Xóa" placement="top">
+                                                    <Tooltip title="Delete" placement="top">
                                                         <IconButton aria-label="delete" onClick={() => handleOpen(row, "delete")}>
                                                             <DeleteOutlined />
                                                         </IconButton>
@@ -180,12 +156,12 @@ const Customer = () => {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'Tất cả', value: -1 }]}
                                     colSpan={headCells.length}
-                                    count={rows.length}
+                                    count={users.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{
                                         inputProps: {
-                                            'aria-label': 'Khách hàng mỗi trang',
+                                            'aria-label': 'Customers per page',
                                         },
                                         native: true,
                                     }}

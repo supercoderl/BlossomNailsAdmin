@@ -1,12 +1,29 @@
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import axiosInstance from 'config/axios';
-import { Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack } from '@mui/material';
+import { Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Select, MenuItem } from '@mui/material';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
 const UserCreator = ({ resetPage }) => {
+    const [roles, setRoles] = useState([]);
+
+    useEffect(() => {
+        getRoles();
+    }, []);
+
+    const getRoles = async () => {
+        await axiosInstance.get("Role/roles").then((response) => {
+            const result = response.data;
+            if(!result) return;
+            else if (result.data && result.success) {
+                setRoles(result.data);
+            }
+        }).catch((error) => console.log("Get roles: ", error));
+    }
+
     return (
         <Formik
             initialValues={{
@@ -16,13 +33,14 @@ const UserCreator = ({ resetPage }) => {
                 firstname: "",
                 lastname: "",
                 phone: "",
+                roleCode: 200
             }}
             validationSchema={Yup.object().shape({
-                username: Yup.string().required('Tên người dùng không được để trống'),
-                phone: Yup.number().required('Số điện thoại không được để trống'),
-                password: Yup.string().required('Mật khẩu không được để trống'),
-                firstname: Yup.string().required('Tên không được để trống'),
-                lastname: Yup.string().required('Họ không được để trống'),
+                username: Yup.string().required('Username cannot be empty!'),
+                phone: Yup.number().required('Phone cannot be empty!'),
+                password: Yup.string().required('Password cannot be empty!'),
+                firstname: Yup.string().required('First name cannot be empty!'),
+                lastname: Yup.string().required('Last name cannot be empty!'),
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
@@ -51,7 +69,7 @@ const UserCreator = ({ resetPage }) => {
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="username-user">Tên người dùng</InputLabel>
+                                <InputLabel htmlFor="username-user">Username</InputLabel>
                                 <OutlinedInput
                                     id="username-user"
                                     type="text"
@@ -59,7 +77,7 @@ const UserCreator = ({ resetPage }) => {
                                     name="username"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Tên người dùng"
+                                    placeholder="Enter username"
                                     fullWidth
                                     error={Boolean(touched.username && errors.username)}
                                 />
@@ -73,7 +91,7 @@ const UserCreator = ({ resetPage }) => {
 
                         <Grid item xs={6}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="password-user">Mật khẩu</InputLabel>
+                                <InputLabel htmlFor="password-user">Password</InputLabel>
                                 <OutlinedInput
                                     id="password-user"
                                     type="text"
@@ -81,7 +99,7 @@ const UserCreator = ({ resetPage }) => {
                                     name="password"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Mật khẩu"
+                                    placeholder="Enter password"
                                     fullWidth
                                     error={Boolean(touched.password && errors.password)}
                                 />
@@ -95,7 +113,7 @@ const UserCreator = ({ resetPage }) => {
 
                         <Grid item xs={6}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="firstname-user">Tên</InputLabel>
+                                <InputLabel htmlFor="firstname-user">First name</InputLabel>
                                 <OutlinedInput
                                     id="firstname-user"
                                     type="text"
@@ -103,7 +121,7 @@ const UserCreator = ({ resetPage }) => {
                                     name="firstname"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Tên"
+                                    placeholder="Enter first name"
                                     fullWidth
                                     error={Boolean(touched.firstname && errors.firstname)}
                                 />
@@ -117,7 +135,7 @@ const UserCreator = ({ resetPage }) => {
 
                         <Grid item xs={6}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="lastname-user">Họ</InputLabel>
+                                <InputLabel htmlFor="lastname-user">Last name</InputLabel>
                                 <OutlinedInput
                                     id="lastname-user"
                                     type="text"
@@ -125,7 +143,7 @@ const UserCreator = ({ resetPage }) => {
                                     name="lastname"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Họ"
+                                    placeholder="Enter last name"
                                     fullWidth
                                     error={Boolean(touched.lastname && errors.lastname)}
                                 />
@@ -139,7 +157,7 @@ const UserCreator = ({ resetPage }) => {
 
                         <Grid item xs={6}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="phone-user">Số điện thoại</InputLabel>
+                                <InputLabel htmlFor="phone-user">Phone number</InputLabel>
                                 <OutlinedInput
                                     id="phone-user"
                                     type="tel"
@@ -147,13 +165,45 @@ const UserCreator = ({ resetPage }) => {
                                     name="phone"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Số điện thoại"
+                                    placeholder="Enter phone number"
                                     fullWidth
                                     error={Boolean(touched.phone && errors.phone)}
                                 />
                                 {touched.phone && errors.phone && (
                                     <FormHelperText error id="standard-weight-helper-text-phone-user">
                                         {errors.phone}
+                                    </FormHelperText>
+                                )}
+                            </Stack>
+                        </Grid>
+
+                        <Grid item xs={6}>
+                            <Stack spacing={1}>
+                                <InputLabel htmlFor="role-user">Role</InputLabel>
+                                <Select
+                                    id="role-user"
+                                    value={values.roleCode}
+                                    name="roleCode"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    placeholder="Select one"
+                                    fullWidth
+                                    error={Boolean(touched.roleCode && errors.roleCode)}
+                                >
+                                    {
+                                        roles && roles.length > 0 ?
+                                            roles.map((item, index) => {
+                                                return (
+                                                    <MenuItem value={item.code} key={index}>{item.name}</MenuItem>
+                                                )
+                                            })
+                                            :
+                                            null
+                                    }
+                                </Select>
+                                {touched.roleCode && errors.roleCode && (
+                                    <FormHelperText error id="standard-weight-helper-text-role-user">
+                                        {errors.roleCode}
                                     </FormHelperText>
                                 )}
                             </Stack>
@@ -170,7 +220,7 @@ const UserCreator = ({ resetPage }) => {
                                     variant="contained"
                                     color="primary"
                                 >
-                                    Tạo mới
+                                    Submit
                                 </Button>
                             </AnimateButton>
                         </Grid>

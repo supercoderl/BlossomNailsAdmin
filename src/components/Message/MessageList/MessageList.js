@@ -27,7 +27,7 @@ export const MessageList = (props) => {
                     startAdornment={
                         <SearchOutlined />
                     }
-                    placeholder="Tìm kiếm..."
+                    placeholder="Search..."
                     size="small"
                     value={search}
                     fullWidth
@@ -45,7 +45,7 @@ export const MessageList = (props) => {
                         )
                     })
                     :
-                    <Typography variant="body1" sx={{ textAlign: "center" }}>Đang tải tin nhắn...</Typography>
+                    <Typography variant="body1" sx={{ textAlign: "center" }}>Loading messages...</Typography>
             }
         </List>
     )

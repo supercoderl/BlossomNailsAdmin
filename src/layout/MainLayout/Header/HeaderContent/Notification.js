@@ -252,7 +252,7 @@ const Notification = ({ notifications, count }) => {
                       !isAtBottom && <ListItemButton
                         sx={{
                           py: `${8}px !important`,
-                          position: 'fixed',
+                          position: 'sticky',
                           bottom: 0,
                           width: "100%",
                           background: 'white',

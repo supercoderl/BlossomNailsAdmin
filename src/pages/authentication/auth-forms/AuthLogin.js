@@ -51,12 +51,12 @@ const AuthLogin = () => {
     <>
       <Formik
         initialValues={{
-          username: 'info@codedthemes.com',
-          password: '123456',
+          username: '',
+          password: '',
         }}
         validationSchema={Yup.object().shape({
-          username: Yup.string().max(255).required('Vui lòng điền tên đăng nhập'),
-          password: Yup.string().max(255).required('Vui lòng điền mật khẩu')
+          username: Yup.string().max(255).required('Username cannot be empty!'),
+          password: Yup.string().max(255).required('Password cannot be empty!')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -88,7 +88,7 @@ const AuthLogin = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="username-login">Tên đăng nhập</InputLabel>
+                  <InputLabel htmlFor="username-login">Username*</InputLabel>
                   <OutlinedInput
                     id="username-login"
                     type="text"
@@ -96,7 +96,7 @@ const AuthLogin = () => {
                     name="username"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Tên đăng nhập"
+                    placeholder="Enter your username"
                     fullWidth
                     error={Boolean(touched.username && errors.username)}
                   />
@@ -109,7 +109,7 @@ const AuthLogin = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">Mật khẩu</InputLabel>
+                  <InputLabel htmlFor="password-login">Password*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -132,7 +132,7 @@ const AuthLogin = () => {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="Enter password"
+                    placeholder="Enter your password"
                   />
                   {touched.password && errors.password && (
                     <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -154,10 +154,10 @@ const AuthLogin = () => {
                         size="small"
                       />
                     }
-                    label={<Typography variant="h6">Lưu thông tin đăng nhập</Typography>}
+                    label={<Typography variant="h6">Save your information</Typography>}
                   />
-                  <Link variant="h6" component={RouterLink} to="" color="text.primary">
-                    Quên mật khẩu?
+                  <Link variant="h6" component={RouterLink} to="" color="text.secondary">
+                    Forgot password?
                   </Link>
                 </Stack>
               </Grid>
@@ -167,15 +167,15 @@ const AuthLogin = () => {
                 </Grid>
               )}
               <Grid item xs={12}>
-                <AnimateButton>
+                <AnimateButton type="rotate">
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Đăng nhập
+                    Submit
                   </Button>
                 </AnimateButton>
               </Grid>
               <Grid item xs={12}>
                 <Divider>
-                  <Typography variant="caption"> Đăng nhập với</Typography>
+                  <Typography variant="caption"> or login with</Typography>
                 </Divider>
               </Grid>
               <Grid item xs={12}>

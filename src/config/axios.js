@@ -2,11 +2,14 @@ import axios from 'axios';
 import AuthService from 'services/auth';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://inox.somee.com/api/',
+    baseURL: 'https://localhost:7176/api/',
 });
 
 axiosInstance.interceptors.request.use(
     config => {
+        config.headers['Access-Control-Allow-Origin'] = '*';
+        config.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, PATCH, DELETE';
+        config.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;

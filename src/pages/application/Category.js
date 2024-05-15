@@ -5,39 +5,33 @@ import { Link as RouterLink } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined, CaretDownOutlined, SortAscendingOutlined, CloseCircleOutlined, ReloadOutlined, ExportOutlined, SortDescendingOutlined, FilterOutlined } from '@ant-design/icons';
 import CustomTableHead from "components/Table/CustomTableHead";
 import axiosInstance from "config/axios";
-import { toast } from "react-toastify";
 import TableRowsLoader from "components/Table/TableRowsSkeleton";
+import { toast } from "react-toastify";
 import ModalCustom from "components/Modal/Modal";
-import UserCreator from "./user-forms/UserCreator";
-import UserViewer from "./user-forms/UserViewer";
 import { dateFormatterV1 } from "utils/date";
+import CategoryCreator from "./category-form/CategoryCreator";
+import CategoryViewer from "./category-form/CategoryViewer";
 import MenuExport from "components/MenuExport";
 import MenuSort from "components/MenuSort";
-import UserFilter from "./user-forms/UserFilter";
+import CategoryFilter from "./category-form/CategoryFilter";
 
 const headCells = [
     {
-        id: 'userID',
+        id: 'categoryID',
         align: 'center',
         disablePadding: false,
         label: 'ID'
     },
     {
-        id: 'username',
+        id: 'name',
         align: 'left',
         disablePadding: true,
-        label: 'Username'
+        label: 'Category name'
     },
     {
-        id: 'roles',
-        align: 'left',
-        disablePadding: false,
-        label: 'Position'
-    },
-    {
-        id: 'isActive',
+        id: 'status',
         align: 'center',
-        disablePadding: true,
+        disablePadding: false,
         label: 'Status'
     },
     {
@@ -54,23 +48,22 @@ const headCells = [
     },
 ];
 
-const User = () => {
+const Category = () => {
     const [page, setPage] = useState(0);
     const [order] = useState('asc');
     const [orderBy] = useState('userID');
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-    const [user, setUser] = useState(null);
+    const [category, setCategory] = useState(null);
     const [state, setState] = useState("update");
     const [searchText, setSearchText] = useState(null);
     const [anchorElExport, setAnchorElExport] = useState(null);
     const [anchorElSort, setAnchorElSort] = useState(null);
     const [anchorElFilter, setAnchorElFilter] = useState(null);
     const [filterObject, setFilterObject] = useState({
-        status: null,
-        role: null
+        status: null
     });
     const [sort, setSort] = useState({
         sortType: null,
@@ -83,12 +76,12 @@ const User = () => {
     const handleOpen = (item, state) => {
         setOpenModal(true);
         setState(state);
-        setUser(item);
+        setCategory(item);
     };
 
     const handleClose = () => {
         setOpenModal(false);
-        setUser(null);
+        setCategory(null);
     }
 
     const handleChangePage = (event, newPage) => {
@@ -100,30 +93,30 @@ const User = () => {
         setPage(0);
     };
 
-    const getUsers = async () => {
+    const getCategories = async () => {
         setLoading(true);
-        await axiosInstance.get("User/users", { params: { ...filterObject, ...sort, searchText } }).then((response) => {
+        await axiosInstance.get("Category/categories", { params: { ...filterObject, ...sort, searchText } }).then((response) => {
             const result = response.data;
             if (result && result.success) {
                 toast.success(result.message);
-                setUsers(result.data);
-                console.log(result.data);
+                setCategories(result.data);
             }
             else toast.error(result.message);
         }).catch((error) => console.log(error)).finally(() => setTimeout(() => setLoading(false), 2000));
     }
 
     useEffect(() => {
-        getUsers();
+        getCategories();
     }, []);
 
     return (
         <>
-            <MainCard title="User list">
+            <MainCard title="Category list">
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                         <OutlinedInput
-                            startAdornment={<SearchOutlined onClick={getUsers} />}
+                            id="outlined-adornment-password"
+                            startAdornment={<SearchOutlined onClick={getCategories} />}
                             endAdornment={
                                 searchText != "" ?
                                     <IconButton edge="end" onClick={() => setSearchText("")}>
@@ -134,10 +127,10 @@ const User = () => {
                             }
                             value={searchText}
                             onChange={e => setSearchText(e.target.value)}
-                            placeholder="Search user.."
+                            placeholder="Search category.."
                             size="small"
                             onKeyPress={event => {
-                                event.key === 'Enter' && getUsers();
+                                event.key === 'Enter' && getCategories();
                             }}
                         />
                         <Button variant="outlined" startIcon={<FilterOutlined />} sx={{
@@ -159,14 +152,14 @@ const User = () => {
                                 ?
                                 <IconButton onClick={() => {
                                     setSort({ ...sort, sortFrom: "ascending" });
-                                    getUsers();
+                                    getCategories();
                                 }}>
                                     <SortDescendingOutlined />
                                 </IconButton>
                                 :
                                 <IconButton onClick={() => {
                                     setSort({ ...sort, sortFrom: "descending" });
-                                    getUsers();
+                                    getCategories();
                                 }}>
                                     <SortAscendingOutlined />
                                 </IconButton>
@@ -180,7 +173,7 @@ const User = () => {
                         </Tooltip>
                         <Tooltip title="Reload">
                             <IconButton onClick={() => {
-                                getUsers();
+                                getCategories();
                                 setSort({ ...sort, sortType: null });
                             }}>
                                 <ReloadOutlined />
@@ -220,32 +213,32 @@ const User = () => {
                                 loading ?
                                     <TableRowsLoader rowsNum={rowsPerPage} colsNum={headCells.length - 1} />
                                     :
-                                    users && users.length > 0 ?
+                                    categories && categories.length > 0
+                                        ?
                                         (rowsPerPage > 0
-                                            ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            : users
+                                            ? categories.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            : categories
                                         ).map((row, index) => (
                                             <TableRow
                                                 hover
                                                 role="checkbox"
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                 tabIndex={-1}
-                                                key={row.userID}
+                                                key={row.productID}
                                             >
                                                 <TableCell component="th" scope="row" align="center">
                                                     <Link color="secondary" component={RouterLink} to="">
                                                         {index + 1}
                                                     </Link>
                                                 </TableCell>
-                                                <TableCell align="left">{row.username}</TableCell>
-                                                <TableCell align="left">{row.roles.join(", ")}</TableCell>
+                                                <TableCell align="left">{row.name}</TableCell>
                                                 <TableCell align="center">
                                                     <Chip
                                                         label={row.isActive ? "Active" : "Disable"}
                                                         color={row.isActive ? "success" : "error"}
                                                     />
                                                 </TableCell>
-                                                <TableCell align="center">{dateFormatterV1(row.updatedAt) || "N/A"}</TableCell>
+                                                <TableCell align="center">{dateFormatterV1(row.updatedAt)}</TableCell>
                                                 <TableCell align="center">
                                                     <Box>
                                                         <Tooltip title="Update" placement="top">
@@ -253,8 +246,8 @@ const User = () => {
                                                                 <EditOutlined />
                                                             </IconButton>
                                                         </Tooltip>
-                                                        <Tooltip title="Delete" placement="top">
-                                                            <IconButton aria-label="delete" onClick={() => handleOpen(row, "delete")}>
+                                                        <Tooltip title="Delete" placement="top" onClick={() => handleOpen(row, "delete")}>
+                                                            <IconButton aria-label="delete">
                                                                 <DeleteOutlined />
                                                             </IconButton>
                                                         </Tooltip>
@@ -265,7 +258,7 @@ const User = () => {
                                         :
                                         <TableRow>
                                             <TableCell colSpan={headCells.length}>
-                                                <Typography variant="body2" align="center">Data is empty</Typography>
+                                                <Typography align="center" variant="body2">Data is empty</Typography>
                                             </TableCell>
                                         </TableRow>
                             }
@@ -275,12 +268,12 @@ const User = () => {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={headCells.length}
-                                    count={users.length}
+                                    count={categories?.length || 0}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{
                                         inputProps: {
-                                            'aria-label': 'Users per page',
+                                            'aria-label': 'Categories per page',
                                         },
                                         native: true,
                                     }}
@@ -292,28 +285,28 @@ const User = () => {
                     </Table>
                 </TableContainer>
             </MainCard>
-            <ModalCustom open={openModal} handleClose={handleClose} width={600}>
+            <ModalCustom open={openModal} handleClose={handleClose} width={400}>
                 {
                     state === "create" ?
-                        <UserCreator resetPage={() => { getUsers(); handleClose(); }} />
+                        <CategoryCreator resetPage={() => { getCategories(); handleClose(); }} />
                         :
-                        <UserViewer user={user} state={state} resetPage={() => { getUsers(); handleClose(); }} />
+                        <CategoryViewer category={category} state={state} resetPage={getCategories} />
                 }
             </ModalCustom>
-            <UserFilter
+            <CategoryFilter
                 open={openFilter}
                 setAnchorEl={setAnchorElFilter}
                 anchorEl={anchorElFilter}
                 filterObject={filterObject}
                 setFilterObject={setFilterObject}
-                onSubmit={getUsers}
+                onSubmit={getCategories}
             />
-            <MenuExport open={openMenuExport} setAnchorEl={setAnchorElExport} anchorEl={anchorElExport} exportObject="user" />
+            <MenuExport open={openMenuExport} setAnchorEl={setAnchorElExport} anchorEl={anchorElExport} exportObject="category" />
             <MenuSort
                 open={openMenuSort}
                 setAnchorEl={setAnchorElSort}
                 anchorEl={anchorElSort}
-                cols={headCells.filter(h => h.id !== "userID" && h.id !== "actions")}
+                cols={headCells.filter(h => h.id !== "categoryID" && h.id !== "actions")}
                 sort={sort}
                 setSort={setSort}
             />
@@ -321,4 +314,4 @@ const User = () => {
     )
 }
 
-export default User;
+export default Category;

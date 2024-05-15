@@ -1,14 +1,27 @@
 // assets
-import { UserOutlined, TeamOutlined, ShoppingOutlined, ShoppingCartOutlined, CommentOutlined, TagOutlined, } from '@ant-design/icons';
+import { 
+    UserOutlined, 
+    TeamOutlined, 
+    ShoppingCartOutlined, 
+    CommentOutlined, 
+    TagOutlined, 
+    HighlightOutlined, 
+    AppstoreAddOutlined, 
+    SolutionOutlined,
+    PictureOutlined   
+} from '@ant-design/icons';
 
 // icons
 const icons = {
     UserOutlined,
     TeamOutlined,
-    ShoppingOutlined,
+    HighlightOutlined,
     ShoppingCartOutlined,
     CommentOutlined,
     TagOutlined,
+    AppstoreAddOutlined,
+    SolutionOutlined,
+    PictureOutlined
 };
 
 // ==============================|| MENU ITEMS - APPLICATION ||============================== //
@@ -20,7 +33,7 @@ const application = {
     children: [
         {
             id: 'customer',
-            title: 'Khách hàng',
+            title: 'Customers',
             type: 'item',
             url: 'application/customer/default',
             icon: icons.TeamOutlined,
@@ -28,39 +41,47 @@ const application = {
         },
         {
             id: 'user',
-            title: 'Tài khoản',
+            title: 'Users',
             type: 'item',
             url: 'application/user/default',
             icon: icons.UserOutlined,
             //   breadcrumbs: false
         },
         {
-            id: 'product',
-            title: 'Sản phẩm',
+            id: 'service',
+            title: 'Services',
             type: 'item',
-            url: 'application/product/default',
-            icon: icons.ShoppingOutlined,
+            url: 'application/service/default',
+            icon: icons.HighlightOutlined,
             //   breadcrumbs: false
         },
         {
-            id: 'discount',
-            title: 'Mã giảm giá',
+            id: 'category',
+            title: 'Categories',
             type: 'item',
-            url: 'application/discount/default',
-            icon: icons.TagOutlined,
+            url: 'application/category/default',
+            icon: icons.AppstoreAddOutlined,
             //   breadcrumbs: false
         },
         {
-            id: 'order',
-            title: 'Đơn đặt hàng',
+            id: 'gallery',
+            title: 'Galleries',
             type: 'item',
-            url: 'application/order/default',
-            icon: icons.ShoppingCartOutlined,
+            url: 'application/gallery/default',
+            icon: icons.PictureOutlined,
+            //   breadcrumbs: false
+        },
+        {
+            id: 'booking',
+            title: 'Bookings',
+            type: 'item',
+            url: 'application/booking/default',
+            icon: icons.SolutionOutlined,
             //   breadcrumbs: false
         },
         {
             id: 'message',
-            title: 'Tin nhắn',
+            title: 'Messages',
             type: 'item',
             url: 'application/message/default',
             icon: icons.CommentOutlined,

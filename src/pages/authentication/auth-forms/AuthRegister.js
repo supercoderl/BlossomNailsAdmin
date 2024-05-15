@@ -67,11 +67,11 @@ const AuthRegister = () => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          firstname: Yup.string().max(255).required('Vui lòng điền tên'),
-          lastname: Yup.string().max(255).required('Vui lòng điền họ'),
-          username: Yup.string().max(255).required('Vui lòng điền tên đăng nhập'),
-          password: Yup.string().max(255).required('Vui lòng điền mật khẩu'),
-          phone: Yup.string().min(10, 'Số điện thoại yêu cầu 10 chữ số').required('Vui lòng nhập số điện thoại')
+          firstname: Yup.string().max(255).required('First name cannot be empty!'),
+          lastname: Yup.string().max(255).required('Last name cannot be empty!'),
+          username: Yup.string().max(255).required('Username cannot be empty!'),
+          password: Yup.string().max(255).required('Password cannot be empty!'),
+          phone: Yup.string().min(10, 'Phone number must be at least 10 alphanumeric characters!').required('Phone number cannot be empty!')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -101,7 +101,7 @@ const AuthRegister = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="firstname-signup">Tên*</InputLabel>
+                  <InputLabel htmlFor="firstname-signup">First name*</InputLabel>
                   <OutlinedInput
                     id="firstname-login"
                     type="firstname"
@@ -122,7 +122,7 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="lastname-signup">Họ*</InputLabel>
+                  <InputLabel htmlFor="lastname-signup">Last name*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.lastname && errors.lastname)}
@@ -144,7 +144,7 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="phone-signup">Số điện thoại</InputLabel>
+                  <InputLabel htmlFor="phone-signup">Phone number*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.phone && errors.phone)}
@@ -166,7 +166,7 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="username-signup">Tên đăng nhập*</InputLabel>
+                  <InputLabel htmlFor="username-signup">Username*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.username && errors.username)}
@@ -188,7 +188,7 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-signup">Mật khẩu</InputLabel>
+                  <InputLabel htmlFor="password-signup">Password*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -238,11 +238,10 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2">
-                  Bằng cách đăng ký, bạn đồng ý với
-                  <Link variant="subtitle2" component={RouterLink} to="#"> Điều khoản </Link>
-                  và
-                  <Link variant="subtitle2" component={RouterLink} to="#"> Chính sách quyền riêng tư </Link>
-                  của chúng tôi.
+                  By selecting &quot;Create account&quot;, you are confirming that you have read and agree to Blossom Nails&apos;s
+                  <Link variant="subtitle2" component={RouterLink} to="#"> Terms of Use </Link>
+                  and
+                  <Link variant="subtitle2" component={RouterLink} to="#"> Privacy Policy. </Link>
                 </Typography>
               </Grid>
               {errors.submit && (
@@ -253,13 +252,13 @@ const AuthRegister = () => {
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Tạo tài khoản
+                    Create account
                   </Button>
                 </AnimateButton>
               </Grid>
               <Grid item xs={12}>
                 <Divider>
-                  <Typography variant="caption">Đăng ký với</Typography>
+                  <Typography variant="caption">or register with</Typography>
                 </Divider>
               </Grid>
               <Grid item xs={12}>

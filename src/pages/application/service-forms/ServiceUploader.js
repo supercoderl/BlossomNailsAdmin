@@ -1,18 +1,18 @@
 import axiosInstance from "config/axios";
-import "./css/ProductUploader.css";
+import "./css/ServiceUploader.css";
 import { IconButton } from "@mui/material";
 import { PictureOutlined, DeleteOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons"
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { checkImageURL } from "utils/text";
 
-const ProductUploader = ({ productID }) => {
+const ServiceUploader = ({ serviceID }) => {
     const [images, setImages] = useState([]);
     const [containerWidth, setContainerWidth] = useState(0);
     const sliderRef = useRef(null);
 
     const getImages = async () => {
-        await axiosInstance.get(`ProductImage/images/${productID}`).then((response) => {
+        await axiosInstance.get(`ServiceImage/images/${serviceID}`).then((response) => {
             const result = response.data;
             if (result && result.success) {
                 setImages(result.data);
@@ -37,7 +37,7 @@ const ProductUploader = ({ productID }) => {
     };
 
     const onDeleteImage = async (imageID) => {
-        await axiosInstance.delete(`ProductImage/image/${imageID}`).then((response) => {
+        await axiosInstance.delete(`ServiceImage/image/${imageID}`).then((response) => {
             const result = response.data;
             if (!result) return;
             else if (result.success) {
@@ -49,17 +49,17 @@ const ProductUploader = ({ productID }) => {
     }
 
     const onUploadImage = async (event) => {
-        const id = toast.loading("Vui lòng chờ...")
+        const id = toast.loading("Please wait...")
         const body = {
             imageName: event.target.files[0].name.split('.').shift(),
-            productID: productID,
+            serviceID: serviceID,
         };
 
         const formData = new FormData();
         formData.append('file', event.target.files[0]);
 
         await axiosInstance
-            .post('ProductImage/upload-image', formData, { params: body, headers: { 'Content-Type': 'multipart/form-data' } })
+            .post('ServiceImage/upload-image', formData, { params: body, headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 const result = response.data;
                 if (!result) return;
@@ -127,4 +127,4 @@ const ProductUploader = ({ productID }) => {
     )
 }
 
-export default ProductUploader;
+export default ServiceUploader;

@@ -20,7 +20,7 @@ const UserViewer = ({ user, state, resetPage }) => {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange}>
-                        <Tab label={`Tài khoản: #${user?.userID.substring(0, 8) || 0}`} value="1" />
+                        <Tab label={`User: #${user?.userID.substring(0, 8) || 0}`} value="1" />
                     </TabList>
                 </Box>
                 <TabPanel value="1" sx={{ p: 0.5 }}>
@@ -34,7 +34,7 @@ const UserViewer = ({ user, state, resetPage }) => {
                             status: user?.status || true
                         }}
                         validationSchema={Yup.object().shape({
-                            username: Yup.string().required('Tên người dùng không được để trống'),
+                            username: Yup.string().required('Username cannot be empty!'),
                         })}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                             try {
@@ -78,7 +78,7 @@ const UserViewer = ({ user, state, resetPage }) => {
                                 <Grid container spacing={3}>
                                     <Grid item xs={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="username-user">Tên người dùng</InputLabel>
+                                            <InputLabel htmlFor="username-user">Username</InputLabel>
                                             <OutlinedInput
                                                 id="username-user"
                                                 type="text"
@@ -86,7 +86,7 @@ const UserViewer = ({ user, state, resetPage }) => {
                                                 name="username"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
-                                                placeholder="Tên người dùng"
+                                                placeholder="Enter username"
                                                 fullWidth
                                                 error={Boolean(touched.username && errors.username)}
                                             />
@@ -100,14 +100,14 @@ const UserViewer = ({ user, state, resetPage }) => {
 
                                     <Grid item xs={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="status-user">Trạng thái</InputLabel>
+                                            <InputLabel htmlFor="status-user">Status</InputLabel>
                                             <Select
                                                 id="status-user"
                                                 value={values.status}
                                                 onChange={handleSelect}
                                             >
-                                                <MenuItem value={true}>Kích hoạt</MenuItem>
-                                                <MenuItem value={false}>Khóa tài khoản</MenuItem>
+                                                <MenuItem value={true}>Active</MenuItem>
+                                                <MenuItem value={false}>Disable</MenuItem>
                                             </Select>
                                             {touched.status && errors.status && (
                                                 <FormHelperText error id="standard-weight-helper-text-status-user">
@@ -128,7 +128,7 @@ const UserViewer = ({ user, state, resetPage }) => {
                                                 variant="contained"
                                                 color={state === "update" ? "primary" : "error"}
                                             >
-                                                {state === "update" ? "Cập nhật" : "Xóa tài khoản"}
+                                                {state === "update" ? "Update" : "Delete account"}
                                             </Button>
                                         </AnimateButton>
                                     </Grid>

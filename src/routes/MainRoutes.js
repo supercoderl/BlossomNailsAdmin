@@ -3,10 +3,8 @@ import { lazy } from 'react';
 // project import
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
-import Message from 'pages/application/Message';
-import OrderViewer from 'pages/application/order-forms/OrderViewer';
-import Discount from 'pages/application/Discount';
-import Profile from 'pages/user/Profile';
+import NailCalendar from 'pages/application/booking-forms/Calendar';
+import Gallery from 'pages/application/Gallery';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -21,8 +19,11 @@ const Shadow = Loadable(lazy(() => import('pages/components-overview/Shadow')));
 const AntIcons = Loadable(lazy(() => import('pages/components-overview/AntIcons')));
 const Customer = Loadable(lazy(() => import('pages/application/Customer')));
 const User = Loadable(lazy(() => import('pages/application/User')));
-const Product = Loadable(lazy(() => import('pages/application/Product')));
-const Order = Loadable(lazy(() => import('pages/application/Order')));
+const Message = Loadable(lazy(() => import('pages/application/Message')));
+const Profile = Loadable(lazy(() => import('pages/user/Profile')));
+const Service = Loadable(lazy(() => import('pages/application/Service')));
+const Category = Loadable(lazy(() => import('pages/application/Category')));
+const Booking = Loadable(lazy(() => import('pages/application/Booking')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -85,37 +86,42 @@ const MainRoutes = {
           ]
         },
         {
-          path: 'product',
+          path: 'service',
           children: [
             {
               path: 'default',
-              element: <Product />
+              element: <Service />
             }
           ]
         },
         {
-          path: 'discount',
+          path: 'category',
           children: [
             {
               path: 'default',
-              element: <Discount />
-            },
-            // {
-            //   path: 'review/:orderID',
-            //   element: <OrderViewer />
-            // }
+              element: <Category />
+            }
           ]
         },
         {
-          path: 'order',
+          path: 'gallery',
           children: [
             {
               path: 'default',
-              element: <Order />
+              element: <Gallery />
+            }
+          ]
+        },
+        {
+          path: 'booking',
+          children: [
+            {
+              path: 'default',
+              element: <Booking />
             },
             {
-              path: 'review/:orderID',
-              element: <OrderViewer />
+              path: 'calendar',
+              element: <NailCalendar />
             }
           ]
         },

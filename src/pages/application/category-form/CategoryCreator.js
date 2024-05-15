@@ -1,28 +1,26 @@
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import axiosInstance from 'config/axios';
-import { Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, } from '@mui/material';
+import { Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack } from '@mui/material';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { toast } from 'react-toastify';
 
-const DiscountCreator = ({ resetPage }) => {
+const CategoryCreator = ({ resetPage }) => {
+
     return (
         <Formik
             initialValues={{
                 name: "",
-                code: "",
-                percentage: 0,
+                priority: 0
             }}
             validationSchema={Yup.object().shape({
-                name: Yup.string().required('Tên mã giảm giá không được để trống'),
-                code: Yup.string().required('Mã giảm giác không được để trống'),
-                percentage: Yup.number().required('Phần trăm giảm không được để trống'),
+                name: Yup.string().required('Category name cannot be empty!'),
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 try {
                     setStatus({ success: false });
                     setSubmitting(true);
-                    await axiosInstance.post(`Discount/create-discount`, values).then((response) => {
+                    await axiosInstance.post(`Category/create-category`, values).then((response) => {
                         const result = response.data;
                         if (result && result.success) {
                             setStatus({ success: true });
@@ -45,20 +43,20 @@ const DiscountCreator = ({ resetPage }) => {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="name-discount">Tên mã giảm giá</InputLabel>
+                                <InputLabel htmlFor="name-category">Category name</InputLabel>
                                 <OutlinedInput
-                                    id="name-discount"
+                                    id="name-category"
                                     type="text"
                                     value={values.name}
                                     name="name"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Tên mã giảm giá"
+                                    placeholder="Enter category name"
                                     fullWidth
                                     error={Boolean(touched.name && errors.name)}
                                 />
                                 {touched.name && errors.name && (
-                                    <FormHelperText error id="standard-weight-helper-text-name-discount">
+                                    <FormHelperText error id="standard-weight-helper-text-name-category">
                                         {errors.name}
                                     </FormHelperText>
                                 )}
@@ -67,43 +65,21 @@ const DiscountCreator = ({ resetPage }) => {
 
                         <Grid item xs={12}>
                             <Stack spacing={1}>
-                                <InputLabel htmlFor="code-discount">Mã giảm giá</InputLabel>
+                                <InputLabel htmlFor="priority-category">Priority</InputLabel>
                                 <OutlinedInput
-                                    id="code-discount"
-                                    type="text"
-                                    value={values.code}
-                                    name="code"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    placeholder="Mã giảm giá"
-                                    fullWidth
-                                    error={Boolean(touched.code && errors.code)}
-                                />
-                                {touched.code && errors.code && (
-                                    <FormHelperText error id="standard-weight-helper-text-code-discount">
-                                        {errors.code}
-                                    </FormHelperText>
-                                )}
-                            </Stack>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Stack spacing={1}>
-                                <InputLabel htmlFor="percentage-discount">Phần trăm giảm</InputLabel>
-                                <OutlinedInput
-                                    id="percentage-discount"
+                                    id="priority-category"
                                     type="number"
-                                    value={values.percentage}
-                                    name="percentage"
+                                    value={values.priority}
+                                    name="priority"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    placeholder="Phần trăm giảm"
+                                    placeholder="Enter priority"
                                     fullWidth
-                                    error={Boolean(touched.percentage && errors.percentage)}
+                                    error={Boolean(touched.priority && errors.priority)}
                                 />
-                                {touched.percentage && errors.percentage && (
-                                    <FormHelperText error id="standard-weight-helper-text-percentage-discount">
-                                        {errors.percentage}
+                                {touched.priority && errors.priority && (
+                                    <FormHelperText error id="standard-weight-helper-text-priority-category">
+                                        {errors.priority}
                                     </FormHelperText>
                                 )}
                             </Stack>
@@ -120,7 +96,7 @@ const DiscountCreator = ({ resetPage }) => {
                                     variant="contained"
                                     color="primary"
                                 >
-                                    Tạo mới
+                                    Submit
                                 </Button>
                             </AnimateButton>
                         </Grid>
@@ -132,4 +108,4 @@ const DiscountCreator = ({ resetPage }) => {
     )
 }
 
-export default DiscountCreator;
+export default CategoryCreator;
