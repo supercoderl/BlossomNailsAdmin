@@ -68,7 +68,7 @@ const Invoice = ({ booking, customer, nailTechnician }) => {
                     </Box>
                     <Box sx={{ width: "45%" }}>
                         <Typography variant="body2">TO</Typography>
-                        <Typography variant="body2">{customer.lastname + " " + customer.firstname}</Typography>
+                        <Typography variant="body2">{booking.customerName}</Typography>
                         <Typography variant="body2">{"+84" + customer.phone}</Typography>
                     </Box>
                 </Box>
