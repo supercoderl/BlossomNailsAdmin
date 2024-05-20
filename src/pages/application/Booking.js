@@ -219,7 +219,7 @@ const BookingRowItem = ({ booking, index}) => {
                         {index + 1}
                     </Link>
                 </TableCell>
-                <TableCell align="left">{relateLoading ? "Loading..." : customer ? customer.lastname + " " + customer.firstname : 'N/A'}</TableCell>
+                <TableCell align="left">{relateLoading ? "Loading..." : booking.customerName || 'N/A'}</TableCell>
                 <TableCell align="center">{dateFormatterV1(booking.bookingDate)}</TableCell>
                 <TableCell align="right">{formatCurrency(booking.totalCost)}</TableCell>
                 <TableCell align="center">{dateFormatterV1(booking.updatedAt)}</TableCell>
