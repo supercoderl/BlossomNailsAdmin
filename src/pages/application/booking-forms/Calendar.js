@@ -99,7 +99,7 @@ const NailCalendar = () => {
                             bookingID: booking.bookingID,
                             title: booking.nailTechnicianID,
                             status: booking.status,
-                            desc: `Customer: ${customers.data.data.find(n => n.userID === booking.customerID)?.lastname + " " + customers.data.data.find(n => n.userID === booking.customerID)?.firstname} \nService: ${serviceBookings.data.data?.map(x => x.service?.name).join(", ")} \nNote: ${booking?.notes || ""}`,
+                            desc: `Customer: ${booking.customerName} \nService: ${serviceBookings.data.data?.map(x => x.service?.name).join(", ")} \nNote: ${booking?.notes || ""}`,
                             start: moment(booking.bookingDate + ' ' + booking.startTime, 'YYYY-MM-DD HH:mm:ss').toDate(),
                             end: moment(booking.bookingDate + ' ' + booking.endTime, 'YYYY-MM-DD HH:mm:ss').toDate()
                         };
