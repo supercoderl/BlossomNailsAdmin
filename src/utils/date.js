@@ -11,3 +11,7 @@ export const dateFormatterV2 = (date, format) => {
 export const timeAgo = (date) => {
     return date ? moment(new Date(date)).fromNow() : "N/A";
 }
+
+export const convertStringToDate = (value, formatFrom, formatTo) => {
+    return value ? moment(value, formatFrom).format(formatTo || "DD/MM/YYYY") : "N/A";
+}

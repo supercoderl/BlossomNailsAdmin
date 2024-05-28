@@ -1,27 +1,23 @@
 // assets
 import { 
-    UserOutlined, 
-    TeamOutlined, 
+    UserOutlined,  
     ShoppingCartOutlined, 
-    CommentOutlined, 
     TagOutlined, 
     HighlightOutlined, 
     AppstoreAddOutlined, 
     SolutionOutlined,
-    PictureOutlined   
+    PictureOutlined,
 } from '@ant-design/icons';
 
 // icons
 const icons = {
     UserOutlined,
-    TeamOutlined,
     HighlightOutlined,
     ShoppingCartOutlined,
-    CommentOutlined,
     TagOutlined,
     AppstoreAddOutlined,
     SolutionOutlined,
-    PictureOutlined
+    PictureOutlined,
 };
 
 // ==============================|| MENU ITEMS - APPLICATION ||============================== //
@@ -31,14 +27,6 @@ const application = {
     title: 'Application',
     type: 'group',
     children: [
-        {
-            id: 'customer',
-            title: 'Customers',
-            type: 'item',
-            url: 'application/customer/default',
-            icon: icons.TeamOutlined,
-            //   breadcrumbs: false
-        },
         {
             id: 'user',
             title: 'Users',
@@ -79,14 +67,6 @@ const application = {
             icon: icons.SolutionOutlined,
             //   breadcrumbs: false
         },
-        {
-            id: 'message',
-            title: 'Messages',
-            type: 'item',
-            url: 'application/message/default',
-            icon: icons.CommentOutlined,
-            //   breadcrumbs: false
-        }
     ]
 };
 

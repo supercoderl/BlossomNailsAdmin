@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
 import {
@@ -36,7 +36,6 @@ import AuthService from 'services/auth';
 
 const AuthLogin = () => {
   const [checked, setChecked] = useState(false);
-  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => {
@@ -71,7 +70,7 @@ const AuthLogin = () => {
                 AuthService.saveRefreshToken(result.data?.refreshToken?.refreshToken);
                 AuthService.saveUser(JSON.stringify(result.data?.userResult));
                 setTimeout(() => {
-                  navigate("/");
+                  window.location.href = "/admin";
                 }, 600);
               }
               else toast.error(result.message);

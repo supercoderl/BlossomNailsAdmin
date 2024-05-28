@@ -12,7 +12,7 @@ export const MessageItem = (props) => {
                 <ListItemAvatar>
                     <Avatar {...stringAvatar(getFirstLetter(getFirstName(data[0]?.fullname)))} />
                 </ListItemAvatar>
-                <ListItemText primary={email || "Ẩn danh"} secondary={timeAgo(data[0]?.createdAt)} />
+                <ListItemText primary={email || "Anonymous"} secondary={timeAgo(data[0]?.createdAt)} />
             </ListItem>
         </ListItemButton>
     )

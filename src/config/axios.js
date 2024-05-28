@@ -2,7 +2,8 @@ import axios from 'axios';
 import AuthService from 'services/auth';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://blossom-nails.somee.com/api/',
+    baseURL: `${process.env.REACT_APP_URL_API}/api/`,
+    //baseURL: 'https://localhost:7176/api/',
 });
 
 axiosInstance.interceptors.request.use(

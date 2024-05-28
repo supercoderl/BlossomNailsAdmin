@@ -11,7 +11,7 @@ const theme = createTheme({
     },
 });
 
-const Invoice = ({ booking, customer, nailTechnician }) => {
+const Invoice = ({ booking, nailTechnician }) => {
     const [serviceBookings, setServiceBookings] = useState([]);
 
     const getServiceBookings = async () => {
@@ -69,7 +69,8 @@ const Invoice = ({ booking, customer, nailTechnician }) => {
                     <Box sx={{ width: "45%" }}>
                         <Typography variant="body2">TO</Typography>
                         <Typography variant="body2">{booking.customerName}</Typography>
-                        <Typography variant="body2">{"+84" + customer.phone}</Typography>
+                        <Typography variant="body2">{booking?.customerPhone || ""}</Typography>
+                        <Typography variant="body2">{booking?.customerEmail || ""}</Typography>
                     </Box>
                 </Box>
 

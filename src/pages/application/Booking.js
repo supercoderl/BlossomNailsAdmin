@@ -1,8 +1,8 @@
 import MainCard from "components/MainCard"
-import { Box, Button, Grid, Link, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination, TableRow, Typography, Drawer } from "../../../node_modules/@mui/material/index";
+import { Box, Button, Link, Table, TableBody, TableCell, TableContainer, TableFooter, TablePagination, TableRow, Typography, Drawer, OutlinedInput, IconButton, Tooltip } from "../../../node_modules/@mui/material/index";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import { CalendarOutlined } from '@ant-design/icons';
+import { CalendarOutlined, SearchOutlined, CloseCircleOutlined, FilterOutlined, CaretDownOutlined, SortDescendingOutlined, SortAscendingOutlined, ReloadOutlined, ExportOutlined } from '@ant-design/icons';
 import CustomTableHead from "components/Table/CustomTableHead";
 import axiosInstance from "config/axios";
 import TableRowsLoader from "components/Table/TableRowsSkeleton";
@@ -11,6 +11,10 @@ import { formatCurrency } from "utils/currency";
 import { dateFormatterV1 } from "utils/date";
 import Invoice from "components/Invoice";
 import { useNavigate } from "react-router-dom";
+import BookingFilter from "./booking-forms/BookingFilter";
+import MenuExport from "components/MenuExport";
+import MenuSort from "components/MenuSort";
+import moment from "moment";
 
 const headCells = [
     {
@@ -20,10 +24,22 @@ const headCells = [
         label: 'ID'
     },
     {
-        id: 'name',
+        id: 'customerName',
         align: 'left',
         disablePadding: true,
         label: 'Customer'
+    },
+    {
+        id: 'customerPhone',
+        align: 'left',
+        disablePadding: true,
+        label: 'Phone'
+    },
+    {
+        id: 'customerEmail',
+        align: 'left',
+        disablePadding: true,
+        label: 'Email'
     },
     {
         id: 'bookingDate',
@@ -38,12 +54,6 @@ const headCells = [
         label: 'Total cost'
     },
     {
-        id: 'updatedAt',
-        align: 'center',
-        disablePadding: false,
-        label: 'Updated time'
-    },
-    {
         id: 'actions',
         align: 'center',
         disablePadding: false,
@@ -55,10 +65,27 @@ const Booking = () => {
     const [page, setPage] = useState(0);
     const [order] = useState('asc');
     const [orderBy] = useState('userID');
+    const [searchText, setSearchText] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [loading, setLoading] = useState(false);
     const [bookings, setBookings] = useState([]);
     const navigate = useNavigate();
+    const [anchorElExport, setAnchorElExport] = useState(null);
+    const [anchorElSort, setAnchorElSort] = useState(null);
+    const [anchorElFilter, setAnchorElFilter] = useState(null);
+    const [filterObject, setFilterObject] = useState({
+        bookingDateFrom: null,
+        bookingDateTo: null,
+        priceMin: 0,
+        priceMax: null
+    });
+    const [sort, setSort] = useState({
+        sortType: null,
+        sortFrom: "descending"
+    });
+    const openMenuExport = Boolean(anchorElExport);
+    const openMenuSort = Boolean(anchorElSort);
+    const openFilter = Boolean(anchorElFilter);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -75,7 +102,17 @@ const Booking = () => {
 
     const getBookings = async () => {
         setLoading(true);
-        await axiosInstance.get("Booking/bookings").then((response) => {
+        await axiosInstance.get("Booking/bookings", {
+            params:
+            {
+                ...sort,
+                searchText,
+                bookingDateFrom: filterObject.bookingDateFrom && moment(filterObject.bookingDateFrom).format("DD-MM-YYYY"),
+                bookingDateTo: filterObject.bookingDateTo && moment(filterObject.bookingDateTo).format("DD-MM-YYYY"),
+                priceMin: filterObject.priceMin,
+                priceMax: filterObject.priceMax
+            }
+        }).then((response) => {
             const result = response.data;
             if (result && result.success) {
                 toast.success(result.message);
@@ -87,17 +124,82 @@ const Booking = () => {
 
     useEffect(() => {
         getBookings();
-    }, []);
+    }, [sort]);
 
     return (
         <>
             <MainCard title="Booking list">
-                <Grid container justifyContent="flex-end">
-                    <Button variant="outlined" color="success" onClick={handleClickCalendar}>
-                        <CalendarOutlined />
-                        <Typography sx={{ ml: 0.5 }}>Calendar</Typography>
-                    </Button>
-                </Grid>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                        <OutlinedInput
+                            startAdornment={<SearchOutlined onClick={getBookings} />}
+                            endAdornment={
+                                searchText != "" ?
+                                    <IconButton edge="end" onClick={() => setSearchText("")}>
+                                        <CloseCircleOutlined />
+                                    </IconButton>
+                                    :
+                                    null
+                            }
+                            value={searchText}
+                            onChange={e => setSearchText(e.target.value)}
+                            placeholder="Search booking.."
+                            size="small"
+                            onKeyPress={event => {
+                                event.key === 'Enter' && getBookings();
+                            }}
+                        />
+                        <Button variant="outlined" startIcon={<FilterOutlined />} sx={{
+                            '.MuiButton-startIcon > *:nth-of-type(1)': {
+                                fontSize: 14
+                            }
+                        }} onClick={(e) => setAnchorElFilter(e.currentTarget)}>
+                            Filter
+                        </Button>
+                        <Button variant="outlined" endIcon={<CaretDownOutlined />} sx={{
+                            '.MuiButton-endIcon > *:nth-of-type(1)': {
+                                fontSize: 14
+                            }
+                        }} onClick={(e) => setAnchorElSort(e.currentTarget)}>
+                            Sort by
+                        </Button>
+                        {
+                            sort.sortFrom === "descending"
+                                ?
+                                <IconButton onClick={() => {
+                                    setSort({ ...sort, sortFrom: "ascending" });
+                                }}>
+                                    <SortDescendingOutlined />
+                                </IconButton>
+                                :
+                                <IconButton onClick={() => {
+                                    setSort({ ...sort, sortFrom: "descending" });
+                                }}>
+                                    <SortAscendingOutlined />
+                                </IconButton>
+                        }
+                    </Box>
+                    <Box>
+                        <Tooltip title="Calendar">
+                            <IconButton onClick={handleClickCalendar}>
+                                <CalendarOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Reload">
+                            <IconButton onClick={() => {
+                                getBookings();
+                                setSort({ ...sort, sortType: null });
+                            }}>
+                                <ReloadOutlined />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Export">
+                            <IconButton onClick={(e) => setAnchorElExport(e.currentTarget)}>
+                                <ExportOutlined />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </Box>
                 <TableContainer
                     sx={{
                         width: '100%',
@@ -162,13 +264,28 @@ const Booking = () => {
                     </Table>
                 </TableContainer>
             </MainCard>
+            <BookingFilter
+                open={openFilter}
+                setAnchorEl={setAnchorElFilter}
+                anchorEl={anchorElFilter}
+                filterObject={filterObject}
+                setFilterObject={setFilterObject}
+                onSubmit={getBookings}
+            />
+            <MenuExport open={openMenuExport} setAnchorEl={setAnchorElExport} anchorEl={anchorElExport} exportObject="booking" />
+            <MenuSort
+                open={openMenuSort}
+                setAnchorEl={setAnchorElSort}
+                anchorEl={anchorElSort}
+                cols={headCells.filter(h => h.id !== "userID" && h.id !== "actions")}
+                sort={sort}
+                setSort={setSort}
+            />
         </>
-    )
-}
+    );
+};
 
-const BookingRowItem = ({ booking, index}) => {
-    const [relateLoading, setRelateLoading] = useState(false);
-    const [customer, setCustomer] = useState(null);
+const BookingRowItem = ({ booking, index }) => {
     const [nailTechnician, setNailTechnician] = useState(null);
     const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -178,30 +295,18 @@ const BookingRowItem = ({ booking, index}) => {
 
     const handleClose = () => {
         setOpenDrawer(false);
-    }
-
-    const getCustomerByID = async (userID) => {
-        setRelateLoading(true);
-        await axiosInstance.get(`User/user-by-id/${userID}`).then((response) => {
-            const result = response.data;
-            if (result && result.success) {
-                setCustomer(result.data);
-            }
-        }).catch((error) => console.log(error)).finally(() => setTimeout(() => setRelateLoading(false), 2000));
-    }
+    };
 
     const getNailTechnicianByID = async (userID) => {
-        setRelateLoading(true);
-        await axiosInstance.get(`User/user-by-id/${userID}`).then((response) => {
-            const result = response.data;
-            if (result && result.success) {
-                setNailTechnician(result.data);
-            }
-        }).catch((error) => console.log(error)).finally(() => setTimeout(() => setRelateLoading(false), 2000));
-    }
+        if (userID) {
+            await axiosInstance.get(`User/user-by-id/${userID}`).then((response) => {
+                const result = response.data;
+                if (result && result.success) setNailTechnician(result.data);
+            }).catch((error) => console.log(error));
+        }
+    };
 
     useEffect(() => {
-        getCustomerByID(booking.customerID);
         getNailTechnicianByID(booking.nailTechnicianID);
     }, []);
 
@@ -219,10 +324,11 @@ const BookingRowItem = ({ booking, index}) => {
                         {index + 1}
                     </Link>
                 </TableCell>
-                <TableCell align="left">{relateLoading ? "Loading..." : booking.customerName || 'N/A'}</TableCell>
+                <TableCell align="left">{booking?.customerName || 'N/A'}</TableCell>
+                <TableCell align="left">{booking?.customerPhone || 'N/A'}</TableCell>
+                <TableCell align="left">{booking?.customerEmail || 'N/A'}</TableCell>
                 <TableCell align="center">{dateFormatterV1(booking.bookingDate)}</TableCell>
                 <TableCell align="right">{formatCurrency(booking.totalCost)}</TableCell>
-                <TableCell align="center">{dateFormatterV1(booking.updatedAt)}</TableCell>
                 <TableCell align="center">
                     <Box>
                         <Button onClick={handleOpen}>View details</Button>
@@ -242,10 +348,10 @@ const BookingRowItem = ({ booking, index}) => {
                     }
                 }}
             >
-                <Invoice booking={booking} customer={customer} nailTechnician={nailTechnician} />
+                <Invoice booking={booking} nailTechnician={nailTechnician} />
             </Drawer>
         </>
     )
-}
+};
 
 export default Booking;
