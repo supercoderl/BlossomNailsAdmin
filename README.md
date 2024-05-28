@@ -1,7 +1,7 @@
 # Blossom Nails Admin
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Price](https://github.com/supercoderl/BlossomNailsAdmin/blob/main/LICENSE)
+[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/supercoderl/BlossomNailsAdmin/blob/main/LICENSE)
 [![GitHub package version](https://img.shields.io/github/package-json/v/codedthemes/mantis-free-react-admin-template)](https://github.com/supercoderl/BlossomNailsAdmin)
 
 Blossom Nails Admin is a website which manage and store information about nail appointments. At there we can view and perform functions as user mangement, customer management, service management, booking management and other secondary functions, etc.
