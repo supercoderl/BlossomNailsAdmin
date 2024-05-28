@@ -1,7 +1,6 @@
 // material-ui
 import { Box, IconButton, Link, useMediaQuery } from '@mui/material';
 import { InstagramOutlined, DiscordOutlined, FacebookOutlined } from '@ant-design/icons';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 // project import
 import Search from './Search';
@@ -14,29 +13,27 @@ import axiosInstance from 'config/axios';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
-const HeaderContent = () => {
+const HeaderContent = ({ connection }) => {
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const user = JSON.parse(AuthService.getUser());
-  const [connection, setConnection] = useState();
   const [notifications, setNotifications] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
 
   const joinRoom = async (user, room) => {
-    const connection = new HubConnectionBuilder().withUrl("https://blossom-nails.somee.com/notify").configureLogging(LogLevel.Information).build();
-    connection.on("ReceiveMessage", (user, message, result) => {
-      setNotifications(messages => [result, ...messages]);
-    });
-    await connection.start();
-    await connection.invoke("JoinRoom", { user, room });
-    setConnection(connection);
+    if (connection) {
+      connection.on("ReceiveMessage", (user, message, result) => {
+        setNotifications(messages => [result, ...messages]);
+      });
+      await connection.start();
+      await connection.invoke("JoinRoom", { user, room });
+    }
   }
 
   const getNotifications = async () => {
     await axiosInstance.get("Notification/notifications").then((response) => {
       const result = response.data;
-      if(!result) return;
-      else if(result.success && result.data && result.data.length > 0)
-      {
+      if (!result) return;
+      else if (result.success && result.data && result.data.length > 0) {
         result.data.map(item => setNotifications(notifications => [...notifications, item]));
         setNotificationCount(result.data.filter(x => !x.readAt).length);
         localStorage.setItem("notificationCount", result.data.filter(x => !x.readAt).length);
@@ -47,7 +44,6 @@ const HeaderContent = () => {
   useEffect(() => {
     getNotifications();
     joinRoom(user?.fullname || "Anonymous", "notification");
-    console.log(connection);
   }, []);
 
   return (

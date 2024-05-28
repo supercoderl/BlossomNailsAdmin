@@ -57,7 +57,7 @@
     max-width: 60%;
 }
 
-.inbox main .message-wrap .senderSays .text-box-sender {
+.inbox main .message-wrap .text-box-sender {
     display: flex;
     flex-direction: column;
     gap: 10px
@@ -67,7 +67,7 @@
     width: 50px;
 }
 
-.inbox main .message-wrap .text-box-sender>.text,
+.inbox main .message-wrap .senderSays>.text,
 .inbox main .message-wrap .userSays>.text {
     background-color: #eff3f6;
     padding: 0.5rem 1rem;
@@ -80,7 +80,6 @@
 }
 
 .inbox main .message-wrap .userSays {
-    margin-top: 3rem;
     max-width: 60%;
     align-self: flex-end;
 }

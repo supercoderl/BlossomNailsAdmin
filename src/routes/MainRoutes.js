@@ -5,6 +5,9 @@ import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 import NailCalendar from 'pages/application/booking-forms/Calendar';
 import Gallery from 'pages/application/Gallery';
+import Payment from 'pages/application/Payment';
+import PaymentResult from 'pages/application/payment-forms/PaymentResult';
+import Chat from 'pages/application/Chat';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -27,9 +30,9 @@ const Booking = Loadable(lazy(() => import('pages/application/Booking')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
-const MainRoutes = {
+const MainRoutes = ({ connection, setHasNotification }) => ({
   path: '/',
-  element: <MainLayout />,
+  element: <MainLayout connection={connection} />,
   children: [
     {
       path: '/',
@@ -135,6 +138,28 @@ const MainRoutes = {
           ]
         },
         {
+          path: 'chat',
+          children: [
+            {
+              path: 'default',
+              element: <Chat connection={connection} setHasNotification={setHasNotification} />
+            }
+          ]
+        },
+        {
+          path: 'payment',
+          children: [
+            {
+              path: 'default',
+              element: <Payment />
+            },
+            {
+              path: 'payload',
+              element: <PaymentResult />
+            }
+          ]
+        },
+        {
           path: 'profile',
           children: [
             {
@@ -146,6 +171,6 @@ const MainRoutes = {
       ]
     },
   ]
-};
+});
 
 export default MainRoutes;
