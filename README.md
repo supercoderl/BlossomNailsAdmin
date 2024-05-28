@@ -10,7 +10,7 @@ Blossom Nails Admin is a website which manage and store information about nail a
 
 :star: :star: :star: Support us by giving star (Top right of this page) if you like this page :star: :star: :star:
 
-![mantis-free-react-dashboard-template.jpg](https://mantisdashboard.io/adv-banner-images/og-social-v1.1.0.png)
+![mantis-free-react-dashboard-template.jpg](https://res.cloudinary.com/do02vtlo0/image/upload/v1716884969/mwsmvuqq2bevvgxkw1fp.png)
 
 
 ## Technology
